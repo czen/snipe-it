@@ -1,5 +1,5 @@
 FROM ubuntu:xenial
-MAINTAINER Brady Wetherington <uberbrady@gmail.com>
+MAINTAINER Anton Bagliy <taccessviolation@gmail.com>
 
 RUN apt-get update && apt-get install -y \
 apache2 \
@@ -27,6 +27,9 @@ cron \
 RUN phpenmod mcrypt
 RUN phpenmod gd
 RUN phpenmod bcmath
+
+ENV SNIPEIT_PORT 80
+ENV SNIPEIT_SSL_PORT 443
 
 RUN sed -i 's/variables_order = .*/variables_order = "EGPCS"/' /etc/php/7.0/apache2/php.ini
 RUN sed -i 's/variables_order = .*/variables_order = "EGPCS"/' /etc/php/7.0/cli/php.ini
@@ -103,9 +106,11 @@ RUN chmod +x /entrypoint.sh
 ENV TINI_VERSION v0.14.0
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
 RUN chmod +x /tini
-ENTRYPOINT ["/tini", "--"]
+# ENTRYPOINT ["/tini", "--"]
+# CMD ["/entrypoint.sh"]
 
-CMD ["/entrypoint.sh"]
+ENTRYPOINT []
+CMD ["sh", "-c", "sed -i \"s/80/$PORT/g\" /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf && /tiny -- /entrypoint.sh"]
 
-EXPOSE 80
-EXPOSE 443
+EXPOSE $SNIPEIT_PORT
+EXPOSE $SNIPEIT_SSL_PORT
