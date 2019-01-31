@@ -110,7 +110,7 @@ RUN chmod +x /tini
 # CMD ["/entrypoint.sh"]
 
 ENTRYPOINT []
-CMD ["sh", "-c", "sed -i \"s/80/$PORT/g\" /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf && /tiny -- /entrypoint.sh"]
+CMD ["sh", "-c", "sed -i \"s/80/$PORT/g\" /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf && /tini -- /entrypoint.sh"]
 
 EXPOSE $SNIPEIT_PORT
 EXPOSE $SNIPEIT_SSL_PORT
